@@ -1,0 +1,25 @@
+{
+  "name": "remotevars",
+  "version": "0.1.0",
+  "description": "Carga variables de entorno desde múltiples providers remotos",
+  "main": "src/index.js",
+  "bin": {
+    "remotevars": "./src/cli.js"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "node -r ./src/register.js example.js",
+    "test": "jest"
+  },
+  "author": "Jose Rafael Garcia",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.28.4",
+    "@babel/preset-env": "^7.28.3",
+    "babel-jest": "^30.2.0",
+    "jest": "^30.2.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  }
+}
