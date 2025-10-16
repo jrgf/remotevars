@@ -7,11 +7,11 @@ const providers = { github, http, local };
 
 /**
  * Load the envirorment vars given the provider
- * @param {Object} options Opciones de configuración { provider, env, repo, path, url, token, ... }
+ * @param {Object} options Opciones de configuración { provider, env, repo, path, url, token, useCache... }
  * @returns {Object} Loaded configs
  */
 export async function loadRemoteVars(options = {}) {
-  const { provider = "http" } = options;
+  const { provider = "http" ,useCache = true} = options;
   const mod = providers[provider];
 
   if (!mod) throw new Error(`Unknown provider: ${provider}`);
@@ -21,18 +21,22 @@ export async function loadRemoteVars(options = {}) {
       process.env[k] = v;
     });
    
-    await cache.save(config);
+    if (useCache) {
+      await cache.save(config);
+    }
 
     console.log(`✅ Loaded ${Object.keys(config).length} vars from ${provider}`);
     return config;
   } catch (err) {
     console.warn(`⚠️ Failed to load from ${provider}: ${err.message}`);
 
-    const cached = await cache.load();
-    if (cached) {
-      Object.entries(cached).forEach(([k, v]) => (process.env[k] = v));
-      console.log("♻️ Loaded vars from cache");
-      return cached;
+    if (useCache) {
+      const cached = await cache.load();
+      if (cached) {
+        Object.entries(cached).forEach(([k, v]) => (process.env[k] = v));
+        console.log("♻️ Loaded vars from cache");
+        return cached;
+      }
     }
 
     throw err; 

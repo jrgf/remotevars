@@ -28,7 +28,11 @@ try {
 
 
 const provider = args.provider || config.defaultProvider || "github";
-const opts = { ...config[provider], ...args, provider, env };
+
+const useCache = args["no-cache"] || config.useCache === false ? false : true;
+
+const opts = { ...config[provider], ...args, provider, env, useCache };
+
 
 async function run() {
   switch (command) {

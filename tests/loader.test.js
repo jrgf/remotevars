@@ -10,6 +10,7 @@ describe("Loader", () => {
     const vars = await loadRemoteVars({
       provider: "local",
       filePath: "./tests/test-config.json",
+      useCache:true
     });
 
     expect(vars).toHaveProperty("TEST_VAR");
