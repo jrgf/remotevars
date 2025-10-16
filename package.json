@@ -1,11 +1,32 @@
 {
   "name": "remotevars",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Carga variables de entorno desde múltiples providers remotos",
   "main": "src/index.js",
   "bin": {
     "remotevars": "./src/cli.js"
   },
+  "keywords": [
+  "env",
+  "environment-variables",
+  "config",
+  "configuration",
+  "dotenv",
+  "remote-env",
+  "cloud-env",
+  "github-env",
+  "env-loader",
+  "env-manager",
+  "remote-config",
+  "nodejs",
+  "cli",
+  "developer-tools",
+  "environment",
+  "config-sync",
+  "secure-env",
+  "devops",
+  "remotevars"
+],
   "type": "module",
   "scripts": {
     "dev": "node -r ./src/register.js example.js",
