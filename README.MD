@@ -112,6 +112,7 @@ When cache is disabled, RemoteVars always fetches fresh data from the provider a
 | **github** | Fetch from a GitHub repository | `repo`, `path`, optional `branch`, `token` |
 | **http** | Fetch from any HTTP/HTTPS endpoint returning JSON | `url` |
 | **local** | Load from a local JSON file | `path` |
+| **s3** | Fetch from a GitHub repository | `bucket`, `key`, optional `region`, `token` |
 
 ---
 

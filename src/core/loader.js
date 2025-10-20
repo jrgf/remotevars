@@ -11,7 +11,7 @@ const providers = { github, http, local };
  * @returns {Object} Loaded configs
  */
 export async function loadRemoteVars(options = {}) {
-  const { provider = "http" ,useCache = true} = options;
+  const { provider = "http" ,useCache = false} = options;
   const mod = providers[provider];
 
   if (!mod) throw new Error(`Unknown provider: ${provider}`);

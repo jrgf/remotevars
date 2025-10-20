@@ -7,26 +7,26 @@
     "remotevars": "./src/cli.js"
   },
   "keywords": [
-  "env",
-  "environment-variables",
-  "config",
-  "configuration",
-  "dotenv",
-  "remote-env",
-  "cloud-env",
-  "github-env",
-  "env-loader",
-  "env-manager",
-  "remote-config",
-  "nodejs",
-  "cli",
-  "developer-tools",
-  "environment",
-  "config-sync",
-  "secure-env",
-  "devops",
-  "remotevars"
-],
+    "env",
+    "environment-variables",
+    "config",
+    "configuration",
+    "dotenv",
+    "remote-env",
+    "cloud-env",
+    "github-env",
+    "env-loader",
+    "env-manager",
+    "remote-config",
+    "nodejs",
+    "cli",
+    "developer-tools",
+    "environment",
+    "config-sync",
+    "secure-env",
+    "devops",
+    "remotevars"
+  ],
   "type": "module",
   "scripts": {
     "dev": "node -r ./src/register.js example.js",
@@ -41,6 +41,7 @@
     "jest": "^30.2.0"
   },
   "dependencies": {
+    "aws-sdk": "^2.1692.0",
     "node-fetch": "^2.7.0"
   }
 }
