@@ -1,6 +1,6 @@
 {
   "name": "remotevars",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Carga variables de entorno desde múltiples providers remotos",
   "main": "src/index.js",
   "bin": {
