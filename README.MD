@@ -19,6 +19,8 @@
 
 ## 📦 Installation
 
+Requires Node.js 18 or newer.
+
 ```bash
 npm install -g remotevars
 ```
@@ -50,7 +52,7 @@ npx remotevars load --provider=http --url=https://example.com/config.json
 #### Print variables to console (for debugging):
 
 ```bash
-npx remotevars print --provider=local --path=./envs/dev.json
+npx remotevars print --provider=local --filePath=./envs/dev.json
 ```
 
 #### Clear local cache:
@@ -78,7 +80,7 @@ Create a `.remotevars.json` in your project root to define your preferred provid
     "url": "https://example.com/config.json"
   },
   "local": {
-    "path": "./envs/dev.json"
+    "filePath": "./envs/dev.json"
   }
 }
 ```
@@ -148,9 +150,7 @@ npm test
 
 ## 🗺️ Roadmap
 
-- 🔐 Add encrypted secrets support
-- ☁️ Add AWS S3 and GCP provider support
-- 🧩 Add `.remotevarsrc` global configuration
+See [ROADMAP.md](ROADMAP.md) for planned releases and priorities.
 
 ---
 

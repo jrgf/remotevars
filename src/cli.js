@@ -6,23 +6,26 @@ import fs from "fs/promises";
 import path from "path";
 
 
-const [, , command = "pull", envArg, ...rest] = process.argv;
+const [, , command = "pull", ...rest] = process.argv;
 
 const args = Object.fromEntries(
-  rest.map((a) => {
-    const [k, v] = a.split("=");
-    return [k.replace(/^--/, ""), v || true];
+  rest.filter((arg) => arg.startsWith("--")).map((arg) => {
+    const separator = arg.indexOf("=");
+    return separator === -1
+      ? [arg.slice(2), true]
+      : [arg.slice(2, separator), arg.slice(separator + 1)];
   })
 );
 
-const env = envArg || args.env || "dev";
+const env = args.env || rest.find((arg) => !arg.startsWith("--")) || "dev";
 
 
 let config = {};
 try {
   const configFile = await fs.readFile(".remotevars.json", "utf8");
   config = JSON.parse(configFile);
-} catch {
+} catch (err) {
+  if (err.code !== "ENOENT") throw new Error(`Invalid .remotevars.json: ${err.message}`);
   console.warn("⚠️ .remotevars.json not found, using CLI options only.");
 }
 
@@ -39,10 +42,11 @@ async function run() {
     case "pull": {
       const vars = await loadRemoteVars(opts);
       const envPath = path.resolve(".env.local");
-      const content = Object.entries(vars)
-        .map(([k, v]) => `${k}=${v}`)
-        .join("\n");
-      await fs.writeFile(envPath, content);
+      const content = `${Object.entries(vars)
+        .map(([key, value]) => `${key}=${JSON.stringify(value)}`)
+        .join("\n")}\n`;
+      await fs.writeFile(envPath, content, { encoding: "utf8", mode: 0o600 });
+      await fs.chmod(envPath, 0o600);
       console.log(`💾 Saved ${Object.keys(vars).length} vars to .env.local`);
       break;
     }

@@ -2,7 +2,8 @@
 import fs from "fs/promises";
 import path from "path";
 
-export async function fetchConfig({ filePath }) {
+export async function fetchConfig({ filePath, path: legacyPath }) {
+  filePath ||= legacyPath;
   if (!filePath) throw new Error("Local provider requires 'filePath'.");
 
   const resolved = path.resolve(filePath);

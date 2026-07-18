@@ -1,4 +1,5 @@
 import * as cache from "../src/core/cache.js";
+import fs from "fs/promises";
 
 describe("Cache", () => {
   afterEach(async () => {
@@ -11,6 +12,9 @@ describe("Cache", () => {
 
     const loaded = await cache.load();
     expect(loaded.VAR).toBe("val");
+    if (process.platform !== "win32") {
+      expect((await fs.stat(".remotevars.cache.json")).mode & 0o777).toBe(0o600);
+    }
   });
 
   it("clear delete the file correctly", async () => {

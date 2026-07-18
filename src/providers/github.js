@@ -1,6 +1,4 @@
 // src/providers/github.js
-import fetch from "node-fetch";
-
 export async function fetchConfig({ repo, path, branch = "main", token }) {
   if (!repo || !path)
     throw new Error("GitHub provider requires 'repo' and 'path'.");
@@ -9,7 +7,7 @@ export async function fetchConfig({ repo, path, branch = "main", token }) {
   const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
   const res = await fetch(url, { headers });
-  if (!res.ok) throw new Error(`GitHub: ${res.statusText}`);
+  if (!res.ok) throw new Error(`GitHub: ${res.status} ${res.statusText}`);
 
   const json = await res.json();
   const decoded = Buffer.from(json.content, "base64").toString("utf8");

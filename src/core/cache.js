@@ -10,7 +10,11 @@ const CACHE_FILE = path.resolve(".remotevars.cache.json");
  */
 export async function save(config) {
   try {
-    await fs.writeFile(CACHE_FILE, JSON.stringify(config, null, 2), "utf8");
+    await fs.writeFile(CACHE_FILE, JSON.stringify(config, null, 2), {
+      encoding: "utf8",
+      mode: 0o600,
+    });
+    await fs.chmod(CACHE_FILE, 0o600);
   } catch (err) {
     console.warn(`⚠️ Failed to save cache: ${err.message}`);
   }

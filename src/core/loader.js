@@ -1,9 +1,32 @@
 import * as github from "../providers/github.js";
 import * as http from "../providers/http.js";
 import * as local from "../providers/local.js";
-import * as cache from "./cache.js"
+import * as cache from "./cache.js";
 
 const providers = { github, http, local };
+const ENV_NAME = /^[A-Za-z_][A-Za-z0-9_]*$/;
+
+function normalizeConfig(config) {
+  if (!config || typeof config !== "object" || Array.isArray(config)) {
+    throw new Error("Provider config must be an object.");
+  }
+
+  return Object.fromEntries(
+    Object.entries(config).map(([key, value]) => {
+      if (!ENV_NAME.test(key)) {
+        throw new Error(`Invalid environment variable name: ${key}`);
+      }
+      if (!["string", "number", "boolean"].includes(typeof value)) {
+        throw new Error(`Environment variable '${key}' must be a scalar value.`);
+      }
+      return [key, String(value)];
+    })
+  );
+}
+
+function applyConfig(config) {
+  Object.assign(process.env, config);
+}
 
 /**
  * Load the envirorment vars given the provider
@@ -11,15 +34,13 @@ const providers = { github, http, local };
  * @returns {Object} Loaded configs
  */
 export async function loadRemoteVars(options = {}) {
-  const { provider = "http" ,useCache = false} = options;
+  const { provider = "http", useCache = false } = options;
   const mod = providers[provider];
 
   if (!mod) throw new Error(`Unknown provider: ${provider}`);
   try {
-    const config = await mod.fetchConfig(options);
-    Object.entries(config).forEach(([k, v]) => {
-      process.env[k] = v;
-    });
+    const config = normalizeConfig(await mod.fetchConfig(options));
+    applyConfig(config);
    
     if (useCache) {
       await cache.save(config);
@@ -33,12 +54,13 @@ export async function loadRemoteVars(options = {}) {
     if (useCache) {
       const cached = await cache.load();
       if (cached) {
-        Object.entries(cached).forEach(([k, v]) => (process.env[k] = v));
+        const config = normalizeConfig(cached);
+        applyConfig(config);
         console.log("♻️ Loaded vars from cache");
-        return cached;
+        return config;
       }
     }
 
-    throw err; 
+    throw err;
   }
 }

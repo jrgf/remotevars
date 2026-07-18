@@ -6,28 +6,35 @@ describe("Loader", () => {
     await cache.clear();
   });
 
-  it("Loads the var from local ", async () => {
+  it("loads and normalizes scalar values", async () => {
     const vars = await loadRemoteVars({
       provider: "local",
       filePath: "./tests/test-config.json",
-      useCache:true
+      useCache: true,
     });
 
-    expect(vars).toHaveProperty("TEST_VAR");
     expect(vars.TEST_VAR).toBe("123");
+    expect(vars.NUMBER_VAR).toBe("42");
+    expect(vars.BOOLEAN_VAR).toBe("false");
     expect(process.env.TEST_VAR).toBe("123");
   });
 
-  it("Use cache if fetching fails", async () => {
-    // guarda algo en cache
+  it("uses cache if fetching fails", async () => {
     await cache.save({ CACHED_VAR: "cached" });
 
     const vars = await loadRemoteVars({
       provider: "local",
       filePath: "./tests/nonexistent.json",
+      useCache: true,
     });
 
     expect(vars).toHaveProperty("CACHED_VAR");
     expect(vars.CACHED_VAR).toBe("cached");
+  });
+
+  it("rejects non-scalar values", async () => {
+    await expect(
+      loadRemoteVars({ provider: "local", filePath: "./package.json" })
+    ).rejects.toThrow("must be a scalar value");
   });
 });
